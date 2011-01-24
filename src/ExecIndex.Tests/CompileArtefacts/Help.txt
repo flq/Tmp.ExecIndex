@@ -1,0 +1,36 @@
+﻿.method public hidebysig instance void  Go(string name,
+                                           class [mscorlib]System.Collections.Generic.IList`1<string> input) cil managed
+{
+  // Code size       35 (0x23)
+  .maxstack  2
+  .locals init ([0] class [mscorlib]System.Exception x)
+  IL_0000:  nop
+  .try
+  {
+    IL_0001:  nop
+    IL_0002:  ldarg.1
+    IL_0003:  ldarg.2
+    IL_0004:  call       void ExecIndex.Tests.CompileArtefacts.ListVisitor::Hello(string,
+                                                                                  class [mscorlib]System.Collections.Generic.IList`1<string>)
+   
+    IL_000b:  leave.s    IL_0019
+  }  // end .try
+  catch [mscorlib]System.Exception 
+  {
+    IL_000d:  stloc.0
+    IL_000e:  nop
+    IL_000f:  ldloc.0
+    IL_0010:  call       void [System]System.Diagnostics.Debug::WriteLine(object)
+    IL_0015:  nop
+    IL_0016:  nop
+    IL_0017:  leave.s    IL_0019
+  }  // end handler
+  IL_0019:  nop
+  IL_001a:  ldarg.1
+  IL_001b:  ldarg.2
+  IL_001c:  call       void ExecIndex.Tests.CompileArtefacts.ListVisitor::Hello(string,
+                                                                                class [mscorlib]System.Collections.Generic.IList`1<string>)
+  IL_0021:  nop
+  IL_0022:  ret
+} // end of method Test::Go
+

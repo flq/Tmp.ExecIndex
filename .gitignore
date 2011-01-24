@@ -1,0 +1,15 @@
+obj
+bin
+out
+NDependOut*
+_cache
+_ReSharper.*
+*.user
+*.resharper
+*.ReSharper
+*.suo
+*.cache
+*.~
+Tmp.Exe*.wrap
+wraps/openwrap
+*.swp
