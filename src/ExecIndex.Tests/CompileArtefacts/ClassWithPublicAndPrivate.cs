@@ -16,7 +16,7 @@ namespace ExecIndex.Tests.CompileArtefacts
 
         public static void StringAndList(string name, IList<string> items)
         {
-
+            items.Add("Hello from compile artefact " + name);
         }
 
         private static void TwoParam(string parameter, int anotherParameter)
