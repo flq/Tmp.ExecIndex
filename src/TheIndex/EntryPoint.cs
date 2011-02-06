@@ -6,12 +6,17 @@ namespace TheIndex
 {
     public class EntryPoint : CallIn
     {
+        static EntryPoint()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += Resolver.Resolve;
+        }
+
         public void Install(string name, IList<string> dependencies)
         {
             
         }
 
-        public void OtherMeth(string name, IList<int> versions)
+        public void Uninstall(int sequence, string name, IList<string> dependencies)
         {
             
         }

@@ -38,13 +38,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="calling_into_a_remote_assembly.cs" />
     <Compile Include="CompileArtefacts\ClassWithPublicAndPrivate.cs" />
     <Compile Include="CompileArtefacts\ListVisitor.cs" />
     <Compile Include="CompileArtefacts\Test.cs" />
+    <Compile Include="IndexChangeContext.cs" />
     <Compile Include="MethodScannerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recognition_of_static_method.cs" />
-    <Compile Include="Reindexing_the_entry_assembly.cs" />
+    <Compile Include="add_install_call_to_index_assembly.cs" />
     <Compile Include="Support\HelpExtensions.cs" />
     <Compile Include="Support\TestsCompiler.cs" />
   </ItemGroup>

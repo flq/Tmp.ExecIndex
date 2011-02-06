@@ -21,6 +21,7 @@ namespace ExecIndex
         private readonly TypeDefinition _type;
         private MethodDefinition _methodDefinition;
         private MethodInfoBasedScanner<CallIn> _scanner;
+        private AssemblyResolveUpdater _resolveUpdater;
 
         private readonly Dictionary<string,AssemblyDefinition> _knownAssemblyDefinitions = new Dictionary<string, AssemblyDefinition>();
 
@@ -29,6 +30,7 @@ namespace ExecIndex
             _assemblyFile = assemblyFile;
             _module = ModuleDefinition.ReadModule(assemblyFile);
             _type = _module.GetType("TheIndex", "EntryPoint");
+            _resolveUpdater = new AssemblyResolveUpdater(_module);
         }
 
         public IModifyAssembly For(Expression<Action<CallIn>> methodSelector)
@@ -51,6 +53,9 @@ namespace ExecIndex
         public void ReindexWithTheseAssemblies(IEnumerable<Assembly> assemblies)
         {
             var proc = _methodDefinition.Body.GetILProcessor();
+
+            foreach (var a in assemblies)
+                AddAssemblyResolveCall(a);
 
             foreach (var methodReference in _scanner.Scan(assemblies).Select(MethodReferenceFromMethodInfo))
                 InsertCall(proc, methodReference);
@@ -82,6 +87,11 @@ namespace ExecIndex
             var mr = ad.MainModule.Import(mi);
             mr = _module.Import(mr);
             return mr;
+        }
+
+        private void AddAssemblyResolveCall(Assembly assembly)
+        {
+            _resolveUpdater.AddResolveCallFor(assembly);
         }
     }
 }

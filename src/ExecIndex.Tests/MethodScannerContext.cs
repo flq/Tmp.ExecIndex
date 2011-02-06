@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ExecIndex.Tests
 {
-    [TestFixture,Ignore]
+    [TestFixture,Ignore("context class")]
     public class MethodScannerContext
     {
         private readonly TestsCompiler _testsCompiler;

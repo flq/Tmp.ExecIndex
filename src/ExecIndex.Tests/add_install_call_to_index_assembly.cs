@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace ExecIndex.Tests
 {
     [TestFixture]
-    public class integration_test_ofreindexing_the_entry_assembly
+    public class add_install_call_to_index_assembly : IndexChangeContext
     {
         private IModifyAssembly _updater;
         private CallIn _entryPoint;
@@ -15,19 +15,16 @@ namespace ExecIndex.Tests
         [TestFixtureSetUp]
         public void Given()
         {
-            var testsCompiler = new TestsCompiler();
-            testsCompiler
-                .StoreAssemblyAs("friend.dll")
-                .With("ClassWithPublicAndPrivate.cs");
-
+            Construct_fresh_index();
+            var asmbly = With_a_monitored_assembly_stored_under("friend.dll");
+            
             using (var updater = new AssemblyUpdater("TheIndex.dll"))
             {
                 _updater = updater.For(c => c.Install(null, null));
-                _updater.ReindexWithTheseAssemblies(testsCompiler.Assembly.AsEnumerable());
+                _updater.ReindexWithTheseAssemblies(asmbly.AsEnumerable());
             }
 
-            var a = Assembly.LoadFrom("TheIndex.dll");
-            _entryPoint = (CallIn)Activator.CreateInstance(a.GetType("TheIndex.EntryPoint"));
+            _entryPoint = Get_entry_point_from_index();
         }
 
         [Test]

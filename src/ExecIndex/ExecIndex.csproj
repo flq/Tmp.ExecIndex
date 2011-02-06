@@ -38,6 +38,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyResolveUpdater.cs" />
     <Compile Include="AssemblyUpdater.cs" />
     <Compile Include="CallIn.cs" />
     <Compile Include="IMethodScanner.cs" />
