@@ -11,7 +11,8 @@ namespace ExecIndex
     public interface IModifyAssembly
     {
         bool HasAccess { get; }
-        void ReindexWithTheseAssemblies(IEnumerable<Assembly> assemblies);
+        void AddCallsWithTheseAssemblies(IEnumerable<Assembly> assemblies);
+        void RemoveCallsToTheseAssemblies(IEnumerable<Assembly> assemblies);
     }
 
     public class AssemblyUpdater : IDisposable, IModifyAssembly
@@ -21,7 +22,7 @@ namespace ExecIndex
         private readonly TypeDefinition _type;
         private MethodDefinition _methodDefinition;
         private MethodInfoBasedScanner<CallIn> _scanner;
-        private AssemblyResolveUpdater _resolveUpdater;
+        private readonly AssemblyResolveUpdater _resolveUpdater;
 
         private readonly Dictionary<string,AssemblyDefinition> _knownAssemblyDefinitions = new Dictionary<string, AssemblyDefinition>();
 
@@ -50,7 +51,7 @@ namespace ExecIndex
             get { return _methodDefinition != null; }
         }
 
-        public void ReindexWithTheseAssemblies(IEnumerable<Assembly> assemblies)
+        void IModifyAssembly.AddCallsWithTheseAssemblies(IEnumerable<Assembly> assemblies)
         {
             var proc = _methodDefinition.Body.GetILProcessor();
 
@@ -59,6 +60,11 @@ namespace ExecIndex
 
             foreach (var methodReference in _scanner.Scan(assemblies).Select(MethodReferenceFromMethodInfo))
                 InsertCall(proc, methodReference);
+        }
+
+        public void RemoveCallsToTheseAssemblies(IEnumerable<Assembly> assemblies)
+        {
+            
         }
 
         private void InsertCall(ILProcessor proc, MethodReference mr)

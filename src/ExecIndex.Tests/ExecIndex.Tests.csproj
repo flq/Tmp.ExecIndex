@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="add_two_install_calls_to_index_assembly.cs" />
     <Compile Include="calling_into_a_remote_assembly.cs" />
     <Compile Include="CompileArtefacts\ClassWithPublicAndPrivate.cs" />
     <Compile Include="CompileArtefacts\ListVisitor.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recognition_of_static_method.cs" />
     <Compile Include="add_install_call_to_index_assembly.cs" />
+    <Compile Include="remove_one_call_in_index_assembly.cs" />
     <Compile Include="Support\HelpExtensions.cs" />
     <Compile Include="Support\TestsCompiler.cs" />
   </ItemGroup>

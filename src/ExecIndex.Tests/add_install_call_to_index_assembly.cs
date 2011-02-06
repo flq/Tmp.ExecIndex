@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 using System.Reflection;
 using ExecIndex.Tests.Support;
 using NUnit.Framework;
@@ -9,7 +10,6 @@ namespace ExecIndex.Tests
     [TestFixture]
     public class add_install_call_to_index_assembly : IndexChangeContext
     {
-        private IModifyAssembly _updater;
         private CallIn _entryPoint;
 
         [TestFixtureSetUp]
@@ -17,20 +17,8 @@ namespace ExecIndex.Tests
         {
             Construct_fresh_index();
             var asmbly = With_a_monitored_assembly_stored_under("friend.dll");
-            
-            using (var updater = new AssemblyUpdater("TheIndex.dll"))
-            {
-                _updater = updater.For(c => c.Install(null, null));
-                _updater.ReindexWithTheseAssemblies(asmbly.AsEnumerable());
-            }
-
+            Add_calls(c => c.Install(null, null), asmbly);
             _entryPoint = Get_entry_point_from_index();
-        }
-
-        [Test]
-        public void the_setup_finds_the_concerned_method()
-        {
-            _updater.HasAccess.IsTrue();
         }
 
         [Test]

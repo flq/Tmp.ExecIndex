@@ -16,7 +16,7 @@ namespace ExecIndex.Tests.CompileArtefacts
 
         public static void StringAndList(string name, IList<string> items)
         {
-            items.Add("Hello from compile artefact " + name);
+            items.Add("Hello from compile artefact assembly " + typeof(ClassWithPublicAndPrivate).Assembly.FullName);
         }
 
         private static void TwoParam(string parameter, int anotherParameter)

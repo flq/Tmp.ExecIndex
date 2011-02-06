@@ -20,8 +20,9 @@ namespace ExecIndex.Tests
 
             using (var updater = new AssemblyUpdater("TheIndex.dll"))
             {
-                updater.For(c => c.Install(null, null));
-                updater.ReindexWithTheseAssemblies(a.AsEnumerable());
+                updater
+                    .For(c => c.Install(null, null))
+                    .AddCallsWithTheseAssemblies(a.AsEnumerable());
             }
 
             _entryPoint = Get_entry_point_from_index();

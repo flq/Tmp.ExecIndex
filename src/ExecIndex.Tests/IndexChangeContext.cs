@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 using ExecIndex.Tests.Support;
 using NUnit.Framework;
@@ -38,6 +39,26 @@ namespace ExecIndex.Tests
         {
             if (File.Exists(assemblyFileName))
                 File.Delete(assemblyFileName);
+        }
+
+        protected void Add_calls(Expression<Action<CallIn>> methodSelector, params Assembly[] asmblies)
+        {
+            using (var updater = new AssemblyUpdater("TheIndex.dll"))
+            {
+                
+                updater.For(methodSelector)
+                    .AddCallsWithTheseAssemblies(asmblies);
+            }
+        }
+
+        protected void Remove_calls(Expression<Action<CallIn>> methodSelector, params Assembly[] asmblies)
+        {
+            using (var updater = new AssemblyUpdater("TheIndex.dll"))
+            {
+
+                updater.For(methodSelector)
+                    .RemoveCallsToTheseAssemblies(asmblies);
+            }
         }
     }
 }
