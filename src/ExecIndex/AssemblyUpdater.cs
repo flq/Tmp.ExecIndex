@@ -62,20 +62,39 @@ namespace ExecIndex
                 InsertCall(proc, methodReference);
         }
 
-        public void RemoveCallsToTheseAssemblies(IEnumerable<Assembly> assemblies)
+        void IModifyAssembly.RemoveCallsToTheseAssemblies(IEnumerable<Assembly> assemblies)
         {
+            foreach (var assemblyName in _scanner.Scan(assemblies).Select(mi => mi.DeclaringType.Assembly.FullName).Distinct())
+                RemoveCallTo(assemblyName);
+        }
+
+        private void RemoveCallTo(string assemblyName)
+        {
+            var ldargCount = _methodDefinition.Parameters.Count; 
+            var calls = (from inst in _methodDefinition.Body.Instructions.Select((ins,index)=> new {ins.Operand,index})
+                        let mr = inst.Operand as MethodReference
+                        where mr != null && mr.DeclaringType.Scope.ToString() == assemblyName
+                        select Enumerable.Range(inst.index - ldargCount, ldargCount + 1).Select(i=>_methodDefinition.Body.Instructions[i]))
+                        .SelectMany(s=>s)
+                        .ToList();
+
+            var proc = _methodDefinition.Body.GetILProcessor();
+            foreach (var c in calls)
+                proc.Remove(c);
             
         }
 
         private void InsertCall(ILProcessor proc, MethodReference mr)
         {
-            var i1 = proc.Create(OpCodes.Ldarg_1);
-            var i2 = proc.Create(OpCodes.Ldarg_2);
-            var i3 = proc.Create(OpCodes.Call, mr);
+            //by design argument count-equivalence, as many args must be loaded on the stack
+            var ldargs = mr.Parameters.Select((_, i) => proc.Create(OpCodes.Ldarg, i+1)).ToList();
             var returnIns = _methodDefinition.Body.Instructions.Last();
-            proc.InsertBefore(returnIns, i1);
-            proc.InsertAfter(i1, i2);
-            proc.InsertAfter(i2, i3);
+
+            foreach (var ldarg in ldargs)
+                proc.InsertBefore(returnIns, ldarg);
+
+            var call = proc.Create(OpCodes.Call, mr);
+            proc.InsertBefore(returnIns, call);
         }
 
         private MethodReference MethodReferenceFromMethodInfo(MethodBase mi)

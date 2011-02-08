@@ -31,7 +31,14 @@ namespace ExecIndex.Tests
 
         public CallIn Get_entry_point_from_index()
         {
-            var a = Assembly.LoadFrom("TheIndex.dll");
+            byte[] bytes = null;
+            using ( var fs = File.Open("TheIndex.dll",FileMode.Open))
+            {
+                bytes = new byte[fs.Length];
+                fs.Read(bytes, 0, (int)fs.Length); //Will never be that large here
+            }
+
+            var a = Assembly.Load(bytes);
             return (CallIn)Activator.CreateInstance(a.GetType("TheIndex.EntryPoint"));
         }
 
